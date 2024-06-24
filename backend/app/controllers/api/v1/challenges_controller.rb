@@ -15,8 +15,6 @@ module Api
 
       # POST /api/v1/challenges
       def create
-        params[:start_date] = Date.today
-        params[:end_date] = Date.today + 1.day
         challenge = Challenge.new(challenge_params)
         if challenge.save
           render json: challenge, status: :created
