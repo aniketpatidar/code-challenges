@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Features from './components/Features'
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <h1 className="text-3xl font-bold underline text-center">
         Hello world!
       </h1>
+      <Features />
       <Footer />
     </>
   )
