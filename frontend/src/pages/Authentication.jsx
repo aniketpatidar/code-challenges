@@ -41,12 +41,6 @@ const Authentication = ({page}) => {
           )}
         </h2>
 
-        {page === Page.Login ? (
-          <p className="text-medium mt-2">Don't have an account? <Link to="/register" className="text-blue-500">Register</Link></p>
-        ) : (
-          <p className="text-medium mt-2">Already have an account? <Link to="/login" className="text-blue-500">Login</Link></p>
-        )}
-
         <form className="mt-6 max-w-96 flex flex-col gap-8" onSubmit={handleSubmit}>
           <div>
             <input
@@ -81,6 +75,12 @@ const Authentication = ({page}) => {
             )}
           </button>
         </form>
+
+        {page === Page.Login ? (
+          <p className="text-medium mt-4">Don't have an account? <Link to="/register" className="text-blue-500">Register</Link></p>
+        ) : (
+          <p className="text-medium mt-4">Already have an account? <Link to="/login" className="text-blue-500">Login</Link></p>
+        )}
       </div>
     </div>
   )
