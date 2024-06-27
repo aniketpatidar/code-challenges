@@ -2,15 +2,19 @@ import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { validateEmail, validatePassword } from '../utils/validation'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { register, login } from '../apis/authentication'
 
 const initiateError = {
   email: '',
-  password: ''
+  password: '',
+  api: ''
 }
 const Authentication = ({page}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(initiateError)
+  const navigate = useNavigate()
 
   const handleEmail = (e) => {
     setEmail(e.target.value)
@@ -20,13 +24,46 @@ const Authentication = ({page}) => {
     setPassword(e.target.value)
   }
 
-  const handleSubmit = (e) => {
-    // e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    let newError = {}
+
     if (!validateEmail(email)) {
-      setError({ ...error, email: 'Invalid email' })
+      newError = { ...newError, email: 'Invalid email'}
     }
     if (!validatePassword(password)) {
-      setError({ ...error, password: 'Password must be at least 8 characters long' })
+      newError = { ...newError, password: 'Password must be at least 8 characters long' }
+    }
+
+    setError(newError)
+
+    if (page == Page.Login) {
+      // Login
+      const [result, error] = await login({
+        user: {
+          email: email,
+          password: password
+        }
+      })
+      handleResponse([result, error])
+    } else {
+      // Register
+      const [result, error] = await register({
+        user: {
+          email: email,
+          password: password
+        }
+      })
+      handleResponse([result, error])
+    }
+  }
+
+  const handleResponse = ([result, error]) => {
+    if (error) {
+      setError({ ...error, api: error })
+    } else {
+      navigate('/')
     }
   }
 
@@ -41,6 +78,7 @@ const Authentication = ({page}) => {
           )}
         </h2>
 
+        { error.api && <p className="text-sm text-medium text-red-500 mt-2">{ error.api }</p> }
         <form className="mt-6 max-w-96 flex flex-col gap-8" onSubmit={handleSubmit}>
           <div>
             <input
