@@ -11,11 +11,14 @@ export const register = async (data) => {
 
   try {
     const response = await fetch(`${domain}/users`, options);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    if (response.ok) {
+      return [response, ''];
     }
-    const result = await response.json();
-    return [result, ''];
+    if (response.status === 422) {
+      return ['', 'Email has already been taken'];
+    }
+    const errorMessage = await response.text();
+    return ['', 'Ńetwork response was not ok: ' + errorMessage];
   } catch (error) {
     return ['', 'An error occurred: ' + error];
   }
@@ -32,11 +35,39 @@ export const login = async (data) => {
 
   try {
     const response = await fetch(`${domain}/users/sign_in`, options);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    if (response.ok) {
+      return [response, ''];
     }
-    const result = await response.json();
-    return [result, ''];
+    if (response.status === 401) {
+      return ['', 'Invalid email or password'];
+    }
+    const errorMessage = await response.text();
+    return ['', 'Ńetwork response was not ok: ' + errorMessage];
+  } catch (error) {
+    return ['', 'An error occurred: ' + error];
+  }
+}
+
+export const logout = async (jwt) => {
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': jwt
+    },
+    body: JSON.stringify(jwt)
+  };
+
+  try {
+    const response = await fetch(`${domain}/users/sign_out`, options);
+    if (response.ok) {
+      return [response, ''];
+    }
+    if (response.status === 401) {
+      return ['', 'Invalid email or password'];
+    }
+    const errorMessage = await response.text();
+    return ['', 'Ńetwork response was not ok: ' + errorMessage];
   } catch (error) {
     return ['', 'An error occurred: ' + error];
   }

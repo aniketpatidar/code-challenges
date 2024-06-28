@@ -1,12 +1,11 @@
+import './index.css'
+import { CookiesProvider } from 'react-cookie';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from './App.jsx'
+import Authentication, { Page } from './pages/Authentication.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import Authentication, { Page } from './pages/Authentication.jsx'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,6 +23,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <CookiesProvider defaultSetOptions={{ path: '/' }}>
+      <RouterProvider router={router} />
+    </CookiesProvider>
   </React.StrictMode>,
 )

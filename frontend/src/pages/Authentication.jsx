@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { validateEmail, validatePassword } from '../utils/validation'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { register, login } from '../apis/authentication'
+import { useCookies } from 'react-cookie'
 
 const initiateError = {
   email: '',
@@ -15,6 +16,12 @@ const Authentication = ({page}) => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(initiateError)
   const navigate = useNavigate()
+  const [cookies, setCookie] = useCookies(['jwt'])
+  useEffect(() => {
+    if (cookies.jwt) {
+      navigate('/')
+    }
+  }, [])
 
   const handleEmail = (e) => {
     setEmail(e.target.value)
@@ -38,31 +45,41 @@ const Authentication = ({page}) => {
 
     setError(newError)
 
+    const hasError = Object.values(newError).some((err) => err !== '')
+    if (hasError) {
+      return
+    }
+
     if (page == Page.Login) {
       // Login
-      const [result, error] = await login({
+      const [response, error] = await login({
         user: {
           email: email,
           password: password
         }
       })
-      handleResponse([result, error])
+      handleResponse([response, error])
     } else {
       // Register
-      const [result, error] = await register({
+      const [response, error] = await register({
         user: {
           email: email,
           password: password
         }
       })
-      handleResponse([result, error])
+      handleResponse([response, error])
     }
   }
 
-  const handleResponse = ([result, error]) => {
+  const handleResponse = async ([response, error]) => {
     if (error) {
       setError({ ...error, api: error })
     } else {
+      const jwt = response.headers.get('Authorization')
+      const result = await response.json()
+      const message = result.message
+      const user = result.user
+      setCookie('jwt', jwt)
       navigate('/')
     }
   }
