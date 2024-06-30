@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { register, login } from '../apis/authentication'
 import { useCookies } from 'react-cookie'
+import Button from '../elements/Button'
 
 const initiateError = {
   email: '',
@@ -122,13 +123,17 @@ const Authentication = ({page}) => {
             { error.password && <p className="text-sm text-medium text-red-500 mt-2">{ error.password }</p> }
           </div>
 
-          <button className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md" type="submit">
+          <Button
+            // childClassName=''
+            // parentClassName=''
+            onClick={handleSubmit}
+          >
             {page === Page.Login ? (
               <p>Login</p>
             ) : (
               <p>Register</p>
             )}
-          </button>
+          </Button>
         </form>
 
         {page === Page.Login ? (

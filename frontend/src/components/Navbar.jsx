@@ -11,6 +11,7 @@ const Navbar = () => {
   const handleLogout = async (e) => {
     const [result, error] = await logout(cookies.jwt)
     handleResponse([result, error])
+    navigate('/login')
   }
 
   const handleLogin = async (e) => {
