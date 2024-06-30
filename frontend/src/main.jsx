@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Authentication, { Page } from './pages/Authentication.jsx'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import AddChallenge from './pages/AddChallenge.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Authentication page={Page.Register}/>,
+  },
+  {
+    path: "/add-challenge",
+    element: <AddChallenge />,
   },
 ]);
 
