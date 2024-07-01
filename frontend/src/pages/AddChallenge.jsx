@@ -1,10 +1,13 @@
-import Button from '../elements/Button'
-import { useState } from 'react'
-import Datepicker from "react-tailwindcss-datepicker";
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import EditorToolbar, { modules, formats } from '../components/EditorToolbar';
 import "react-quill/dist/quill.snow.css";
+import { getChallenges } from '../apis/challenges'
+import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import Button from '../elements/Button'
+import Datepicker from "react-tailwindcss-datepicker";
+import EditorToolbar, { modules, formats } from '../components/EditorToolbar';
+import ReactQuill from 'react-quill';
 
 const initiateError = {
   title: '',
@@ -34,7 +37,18 @@ const AddChallenge = () => {
     if (hasError) {
       return
     }
+
+    addChallenge()
   }
+
+  const navigate = useNavigate()
+  const [cookies, setCookie] = useCookies(['jwt'])
+
+  useEffect(() => {
+    if (!cookies.jwt) {
+      navigate('/login')
+    }
+  })
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -56,6 +70,28 @@ const AddChallenge = () => {
     console.log("newValue:", newValue);
     setValue(newValue);
   }
+
+  const addChallenge = async (data) => {
+    const [result, error] = await getChallenges(cookies.jwt,{
+      challenge: {
+        title: title,
+        description: description,
+        start_date: value.startDate,
+        end_date: value.endDate
+      }
+    })
+    handleResponse([result, error])
+  }
+
+  const handleResponse = async ([response, error]) => {
+    if (error) {
+      setError({ ...error, api: error })
+    } else {
+      console.log("response:", response);
+      navigate('/')
+    }
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl">Add Challenge</h1>
