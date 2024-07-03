@@ -1,6 +1,5 @@
 import 'react-quill/dist/quill.snow.css';
-import "react-quill/dist/quill.snow.css";
-import { getChallenges } from '../apis/challenges'
+import { createChallenge } from '../apis/challenges'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -72,7 +71,7 @@ const AddChallenge = () => {
   }
 
   const addChallenge = async (data) => {
-    const [result, error] = await getChallenges(cookies.jwt,{
+    const [result, error] = await createChallenge(cookies.jwt,{
       challenge: {
         title: title,
         description: description,

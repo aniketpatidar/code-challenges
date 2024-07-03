@@ -9,6 +9,18 @@ module Api
         render json: challenges, status: :ok
       end
 
+      # GET /api/v1/challenges/get_challenges
+      def get_challenges
+        @all_challenges = Challenge.all
+        @active_challenges = Challenge.active
+        @upcoming_challenges = Challenge.upcoming
+        render json: {
+          all: @all_challenges,
+          active: @active_challenges,
+          upcoming: @upcoming_challenges
+        }, status: :ok
+      end
+
       # GET /api/v1/challenges/:id
       def show
         challenge = Challenge.find(params[:id])
