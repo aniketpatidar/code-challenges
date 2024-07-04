@@ -24,6 +24,10 @@ const router = createBrowserRouter([
     path: "/add-challenge",
     element: <AddChallenge />,
   },
+  {
+    path: "/*",
+    element: <App />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

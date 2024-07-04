@@ -42,3 +42,25 @@ export const getChallenges = async (jwt) => {
     return ['', 'An error occurred: ' + error]
   }
 }
+
+export const getChallenge = async (jwt, challengeId) => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': jwt
+    }
+  }
+
+  try {
+    const response = await fetch(`${domain}/api/v1/challenges/${challengeId}`, options)
+    if (response.ok) {
+      return [await response.json(), '']
+    }
+    const errorMessage = await response.text()
+    return ['', 'Network response was not ok: ' + errorMessage]
+  } catch (error) {
+    return ['', 'An error occurred: ' + error]
+  }
+}
+

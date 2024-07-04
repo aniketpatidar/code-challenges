@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { logout } from '../apis/authentication'
 import { useCookies } from 'react-cookie'
 import { useState } from 'react'
+import Button from '../elements/Button'
 
 const Navbar = () => {
   const [cookies, setCookie, removeCookie] = useCookies([])
@@ -46,11 +47,11 @@ const Navbar = () => {
             <li>Contact</li>
           </ul> */}
           <div className="">
-            { jwt ?
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleLogout}>Logout</button>
-            :
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleLogin}>Login</button>
-            }
+            { jwt ? (
+              <Button onClick={handleLogout}><p>Logout</p></Button>
+            ) : (
+              <Button onClick={handleLogin}><p>Login</p></Button>
+            )}
           </div>
         </nav>
       </div>
